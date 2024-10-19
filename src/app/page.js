@@ -78,7 +78,10 @@ export default function Home() {
           </div>
         ))}
       <h1 className="text-6xl">{`Bank account: ${bank} KD`}</h1>
-      <button className="bg-red-700 text-6xl rounded	" onClick={addToCounter}>
+      <button
+        className="bg-red-700 text-5xl rounded p-4 "
+        onClick={addToCounter}
+      >
         Work
       </button>
     </div>
