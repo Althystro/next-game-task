@@ -1,99 +1,85 @@
 "use client";
-import { Button } from "bootstrap";
-import Image from "next/image";
 import { useState } from "react";
 
 export default function Home() {
-  const [counter, setCounter] = useState(0);
   const [bank, setBank] = useState(0);
-  const [isButtonVisibility, setIsButtonVisibility] = useState(false);
-
-  const viewVisability = () => {
-    setIsButtonVisibility(true);
-  };
-  const removeVisability = () => {
-    setIsButtonVisibility(false);
-  };
-
-  const toggleVisibilty = () => {
-    setIsButtonVisibility(!isButtonVisibility);
-  };
-  // const bankAccount = (addToBank) => {
-  //   if (addToBank > 10) {
-  //     viewVisability();
-  //     return addToBank + 10;
-  //   }
-  //   return addToBank;
-  // };
-
-  const powerUp = (power, modifer) => {
-    return power + 2 * modifer;
-  };
-
-  const firstPowerup = (powerup) => {
-    return powerup + 2; // 2 * 1
-  };
-  const secondPowerup = (powerup) => {
-    return powerup + 10; // 2 * 5
-  };
-  const thirdPowerup = (powerup) => {
-    return powerup + 50; // 2 * 25
-  };
-  const fourthPowerup = (powerup) => {
-    return powerup + 100; // 2 * 50
-  };
-  const fifthPowerup = (powerup) => {
-    return powerup + 200; // 2 * 100
-  };
-  const sixthPowerup = (powerup) => {
-    return powerup + 500; // 2 * 250
-  };
-  // const seventhPowerup = (powerup) => {
-  //   return powerup + 1000;
-  // };
+  const [clickValue, setClickValue] = useState(1);
+  const [powerUps, setPowerUps] = useState([
+    {
+      name: "Freelancer",
+      cost: 10,
+      effect: () => setClickValue(2),
+    },
+    {
+      name: "Small Business Owner",
+      cost: 20,
+      effect: () => setClickValue(10),
+    },
+    {
+      name: "Expand Business:",
+      cost: 50,
+      effect: () => setClickValue(50),
+    },
+    {
+      name: "Automated Systems",
+      cost: 200,
+      effect: () => setClickValue(400),
+    },
+    {
+      name: "Conglomerate CEO",
+      cost: 2000,
+      effect: () => setClickValue(1000),
+    },
+    {
+      name: "Expand world-wide",
+      cost: 20000,
+      effect: () => setClickValue(5000),
+    },
+    {
+      name: "Form a new country",
+      cost: 10000,
+      effect: () => setClickValue(10000),
+    },
+    {
+      name: "Colnize Other countries",
+      cost: 20000,
+      effect: () => setClickValue(20000),
+    },
+  ]);
 
   const addToCounter = () => {
-    powerUpbutton(bank);
+    setBank((prevBank) => prevBank + clickValue);
   };
 
-  const powerUpbutton = (bank) => {
-    if (bank <= 10) {
-      setBank(bank + 1);
-    } else if (bank >= 10 && bank < 20) {
-      if (isButtonVisibility == true) {
-        setBank(firstPowerup(bank));
-        removeVisability();
-      }
-    } else if (bank >= 20 && bank < 100) {
-      setBank(secondPowerup(bank)); // setBank(powerUp(bank, 5))
-    } else if (bank >= 100 && bank < 1000) {
-      setBank(thirdPowerup(bank)); // setBank(powerUp(bank, 25))
-    } else if (bank >= 1000 && bank < 2000) {
-      setBank(fourthPowerup(bank)); // setBank(powerUp(bank, 50))
-    } else if (bank >= 2000 && bank < 5000) {
-      setBank(fifthPowerup(bank)); // setBank(powerUp(bank, 100))
-    } else if (bank >= 5000) {
-      setBank(sixthPowerup(bank));
+  const purchasePowerUp = (powerUp) => {
+    if (bank >= powerUp.cost) {
+      setBank((prevBank) => prevBank - powerUp.cost);
+      powerUp.effect();
+      setPowerUps((prevUpgrades) => prevUpgrades.filter((u) => u !== powerUp));
     }
-
-    // if(bank >= 5000){
-
-    // } else if(bank >= 2000) {
-
-    // } else if (bank >= 1000) {
-
-    // }
   };
 
   return (
-    <div className="bg-blue flex flex-col justify-around items-center w-screen h-screen ">
-      {/* <h1 className="text-6xl	">count:{counter} </h1> */}
-      <h1 className="text-6xl	">count:{bank} </h1>
-      {isButtonVisibility ? (
-        <button className="bg-red-700 text-6xl">hello</button>
-      ) : null}
-      <button className="bg-red-700 text-6xl" onClick={addToCounter}>
-        Add +1
+    <div className="bg-blue flex flex-col justify-around items-center w-screen h-screen">
+      <h2 className="text-4xl mt-8">Power-ups Available</h2>
+      {powerUps
+        .filter((powerUp) => bank >= powerUp.cost)
+        .map((powerUp) => (
+          <div className="border-2 border-black p-2 text-center">
+            <h4>{powerUp.name}</h4>
+            <p>Cost: {powerUp.cost}</p>
+            <button
+              className="bg-green-600 text-white px-4 py-2"
+              onClick={() => purchasePowerUp(powerUp)}
+              disabled={bank < powerUp.cost}
+            >
+              Purchase
+            </button>
+          </div>
+        ))}
+      <h1 className="text-6xl">{`Bank account: ${bank} KD`}</h1>
+      <button className="bg-red-700 text-6xl rounded	" onClick={addToCounter}>
+        Work
       </button>
     </div>
   );
