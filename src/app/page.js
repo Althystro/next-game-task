@@ -1,15 +1,18 @@
 "use client";
 import { useState } from "react";
-import { Inter, Roboto, Open_Sans } from "next/font/google";
 import AnimatedNumbers from "react-animated-numbers";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import colonize from "./assets/colinize.webp";
+import takeOver from "./assets/take-over.webp";
+import logo from "./assets/logo.png";
 
 export default function Home() {
   const [bank, setBank] = useState(0);
   const [clickValue, setClickValue] = useState(1);
   const [status, setStatus] = useState("");
   const [image, setImage] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const [powerUps, setPowerUps] = useState([
     {
       name: "Freelancer",
@@ -61,23 +64,21 @@ export default function Home() {
       effect: () => setClickValue(10000),
       status: "You are now forming a new country!",
       image:
-        "https://i.redd.it/i-made-a-made-up-country-v0-lwwg9ayfnxp81.png?width=1151&format=png&auto=webp&s=9fba7b06320fff52e13bb830a0fc7f1f2450bc48!",
+        "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjxEhIhUDjhJu24c31Zt8C_2slJa5IFviJnqLWUWjq3fNcuetLlNHbSM5ZYa-5gUdbXYkFotLkCOXaR_pJBFiZaq-FqaAEXwfvCSST6GoQgz1RRF6AdfJphWR0acy1rSOir43acpE_1ga3C/s400/Velenril+Iriaebor+Tobeymoor.jpg",
     },
     {
       name: "Colonize other countries",
       cost: 200000,
       effect: () => setClickValue(20000),
       status: "You are colonizing other countries!",
-      image:
-        "https://files.oaiusercontent.com/file-aQ49ji43eJWsStEZweQuy08T?se=2024-10-20T07%3A08%3A56Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3Dc0c6bb21-8a6e-4f53-886e-022e170c89be.webp&sig=K%2Bainssxrm7YJ/wg0jYI/GXiVemuwrUvjzA3mHRbT%2BY%3D",
+      image: colonize,
     },
     {
       name: "Take over the world!",
       cost: 400000,
       effect: () => setClickValue(40000),
       status: "You have now taken over the world!",
-      image:
-        "https://files.oaiusercontent.com/file-6e1b9PLTuq3d9rq80CqCzGaC?se=2024-10-20T07%3A10%3A03Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3Df5573d7d-a57a-4ed3-9212-54d2ccebbe96.webp&sig=XaxbJM7cD1sbk5aOysbRDMaDz72Z5cZ4XhfHh8DMi14%3D",
+      image: takeOver,
     },
   ]);
 
@@ -96,42 +97,83 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-blue flex flex-col justify-around items-center w-screen h-screen">
-      <h2 className="text-4xl mt-8">Power-ups Available</h2>
-      {powerUps
-        .filter((powerUp) => bank >= powerUp.cost)
-        .map((powerUp) => (
-          <div className="border-2 border-black p-1 text-center text-3xl">
-            <h4>{powerUp.name}</h4>
-            <p className=" p-2">Cost: {powerUp.cost}</p>
+    <div className="bg-blue flex flex-col items-center w-screen h-screen">
+      {showModal && (
+        <div className="fixed top-0 left-0 right-0 bg-black bg-opacity-50 flex justify-center items-start pt-10 z-50">
+          <div className="bg-white p-8 rounded shadow-lg w-3/4 md:w-1/2">
             <motion.button
-              whileHover={{ scale: 1.1, backgroundColor: "green" }} // Animation on hover
+              className="bg-red-600 text-white px-4 py-2 rounded mb-4"
+              whileHover={{ scale: 1.1, backgroundColor: "red" }} // Animation on hover
               transition={{ duration: 0.3 }}
-              style={{
-                padding: "10px 20px",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-              className="bg-green-800 text-white px-4 py-2  rounded"
-              onClick={() => purchasePowerUp(powerUp)}
-              disabled={bank < powerUp.cost}
+              onClick={() => setShowModal(false)}
             >
-              Purchase
+              Close
             </motion.button>
+            {powerUps
+              .filter((powerUp) => bank >= powerUp.cost)
+              .map((powerUp) => (
+                <div
+                  key={powerUp.name}
+                  className="p-1 text-center text-3xl mb-4 flex items-center justify-center flex-col
+                  "
+                >
+                  <h4 className="text-black">{powerUp.name}</h4>
+                  <p className="p-2 text-black">Cost: {powerUp.cost}</p>
+                  <Image
+                    src={powerUp.image}
+                    width={300}
+                    height={300}
+                    alt={powerUp.name}
+                    className="mb-2"
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.1, backgroundColor: "green" }} // Animation on hover
+                    transition={{ duration: 0.3 }}
+                    style={{
+                      padding: "10px 20px",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                    className="bg-green-800 text-white px-4 py-2 rounded"
+                    onClick={() => {
+                      purchasePowerUp(powerUp);
+                      setShowModal(false); // Close modal after purchase
+                    }}
+                    disabled={bank < powerUp.cost}
+                  >
+                    Purchase
+                  </motion.button>
+                </div>
+              ))}
           </div>
-        ))}
+        </div>
+      )}
+      <div className="flex flex-row justify-start bg-red justi">
+        <Image src={logo} width={170} height={170}></Image>
+      </div>{" "}
+      {/* Button to open the modal */}
+      {powerUps.some((powerUp) => bank >= powerUp.cost) && (
+        <motion.button
+          whileHover={{ scale: 1.1, backgroundColor: "green" }} // Animation on hover
+          transition={{ duration: 0.3 }}
+          style={{
+            padding: "10px 20px",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+          className="absolute top-4 left-4 bg-blue-600 text-white px-4 py-2 rounded"
+          onClick={() => setShowModal(true)}
+        >
+          View Available Power-ups
+        </motion.button>
+      )}
       <h1 className="text-6xl justify-center items-center flex flex-row m-10 ">
         <span className="mr-4">Bank account:</span>
         {<AnimatedNumbers includeComma animateToNumber={bank} />}
         <span className="ml-2">KD</span>
       </h1>
-      {/* <button
-        className="bg-red-700 text-5xl rounded p-4 "
-        onClick={addToCounter}
-      >
-        Work
-      </button> */}
       <motion.button
         whileHover={{ scale: 1.1, backgroundColor: "gray" }} // Animation on hover
         transition={{ duration: 0.3 }}
@@ -141,16 +183,18 @@ export default function Home() {
           borderRadius: "5px",
           cursor: "pointer",
         }}
-        className="bg-gray-600 text-5xl rounded p-4 "
+        className="bg-gray-600 text-5xl rounded p-4"
         onClick={addToCounter}
+        disabled={showModal} // Disable button if modal is open
       >
         Work
       </motion.button>
-      <h2>Status:</h2>
-      <p>{status ? status : "No status yet"}</p>
-      {/* {alert( */}
+      <h2 className="text-4xl mt-8">Status:</h2>
+      <p className="text-4xl">{status ? status : "No status yet"}</p>
       <p>
-        {image ? <Image src={image} width={300} height={300}></Image> : null}
+        {image ? (
+          <Image src={image} width={300} height={300} alt="Power-up Image" />
+        ) : null}
       </p>
     </div>
   );
