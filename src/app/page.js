@@ -122,7 +122,7 @@ export default function Home() {
           </div>
         ))}
       <h1 className="text-6xl justify-center items-center flex flex-row m-10 ">
-        <span className="mr-4">Bank account:</span>{" "}
+        <span className="mr-4">Bank account:</span>
         {<AnimatedNumbers includeComma animateToNumber={bank} />}
         <span className="ml-2">KD</span>
       </h1>
