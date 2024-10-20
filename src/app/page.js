@@ -103,7 +103,7 @@ export default function Home() {
           <div className="bg-white p-8 rounded shadow-lg w-3/4 md:w-1/2">
             <motion.button
               className="bg-red-600 text-white px-4 py-2 rounded mb-4"
-              whileHover={{ scale: 1.1, backgroundColor: "red" }} // Animation on hover
+              whileHover={{ scale: 1.1, backgroundColor: "red" }}
               transition={{ duration: 0.3 }}
               onClick={() => setShowModal(false)}
             >
@@ -127,7 +127,7 @@ export default function Home() {
                     className="mb-2"
                   />
                   <motion.button
-                    whileHover={{ scale: 1.1, backgroundColor: "green" }} // Animation on hover
+                    whileHover={{ scale: 1.1, backgroundColor: "green" }}
                     transition={{ duration: 0.3 }}
                     style={{
                       padding: "10px 20px",
@@ -138,7 +138,7 @@ export default function Home() {
                     className="bg-green-800 text-white px-4 py-2 rounded"
                     onClick={() => {
                       purchasePowerUp(powerUp);
-                      setShowModal(false); // Close modal after purchase
+                      setShowModal(false);
                     }}
                     disabled={bank < powerUp.cost}
                   >
@@ -152,10 +152,9 @@ export default function Home() {
       <div className="flex flex-row justify-start bg-red justi">
         <Image src={logo} width={170} height={170}></Image>
       </div>{" "}
-      {/* Button to open the modal */}
       {powerUps.some((powerUp) => bank >= powerUp.cost) && (
         <motion.button
-          whileHover={{ scale: 1.1, backgroundColor: "green" }} // Animation on hover
+          whileHover={{ scale: 1.1, backgroundColor: "green" }}
           transition={{ duration: 0.3 }}
           style={{
             padding: "10px 20px",
@@ -175,7 +174,7 @@ export default function Home() {
         <span className="ml-2">KD</span>
       </h1>
       <motion.button
-        whileHover={{ scale: 1.1, backgroundColor: "gray" }} // Animation on hover
+        whileHover={{ scale: 1.1, backgroundColor: "gray" }}
         transition={{ duration: 0.3 }}
         style={{
           padding: "10px 20px",
@@ -185,7 +184,7 @@ export default function Home() {
         }}
         className="bg-gray-600 text-5xl rounded p-4"
         onClick={addToCounter}
-        disabled={showModal} // Disable button if modal is open
+        disabled={showModal}
       >
         Work
       </motion.button>
